@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Image Broadcast - View Only</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c 0%, #4b6cb7 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .live-indicator {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .live-indicator i {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .broadcast-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .current-image-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .current-image {
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .no-image {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .no-image i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        #broadcastImage {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .image-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .info-item h3 {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 5px;
+        }
+
+        .info-item p {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: #4b6cb7;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #3a5ca9;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.share {
+            background: #2ecc71;
+        }
+
+        .action-btn.share:hover {
+            background: #27ae60;
+        }
+
+        .recent-section {
+            margin-top: 40px;
+        }
+
+        .recent-section h2 {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .recent-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .recent-item {
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            aspect-ratio: 1;
+        }
+
+        .recent-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .recent-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .recent-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 10px;
+            color: white;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .recent-item:hover .recent-overlay {
+            opacity: 1;
+        }
+
+        .viewer-count {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.5s, opacity 0.5s;
+            z-index: 1000;
+            max-width: 300px;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .notification.error {
+            background-color: #e74c3c;
+        }
+
+        .notification.info {
+            background-color: #3498db;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .current-image {
+                height: 300px;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-satellite-dish"></i> Live Image Broadcast</h1>
+            <p class="subtitle">View the latest images shared in real-time. Updates automatically every 5 seconds.</p>
+            <div class="live-indicator">
+                <i class="fas fa-circle"></i>
+                <span>LIVE BROADCAST</span>
+            </div>
+        </header>
+
+        <div class="broadcast-container">
+            <div class="current-image-container">
+                <div class="current-image" id="currentImage">
+                    <div class="no-image" id="noImage">
+                        <i class="fas fa-image"></i>
+                        <h2>Waiting for first image...</h2>
+                        <p>The broadcast will start when an image is uploaded</p>
+                    </div>
+                    <img id="broadcastImage" style="display: none;" alt="Live broadcast image">
+                </div>
+                
+                <div class="image-info" id="imageInfo" style="display: none;">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <h3><i class="far fa-clock"></i> Last Updated</h3>
+                            <p id="lastUpdated">Just now</p>
+                        </div>
+                        <div class="info-item">
+                            <h3><i class="fas fa-expand-alt"></i> Dimensions</h3>
+                            <p id="imageDimensions">Loading...</p>
+                        </div>
+                        <div class="info-item">
+                            <h3><i class="fas fa-hdd"></i> File Size</h3>
+                            <p id="imageSize">Loading...</p>
+                        </div>
+                        <div class="info-item">
+                            <h3><i class="fas fa-cloud"></i> Cloudinary ID</h3>
+                            <p id="imageId">Loading...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button class="action-btn" id="copyUrlBtn">
+                            <i class="fas fa-link"></i> Copy Image URL
+                        </button>
+                        <button class="action-btn" id="openImageBtn">
+                            <i class="fas fa-external-link-alt"></i> Open Full Size
+                        </button>
+                        <button class="action-btn share" id="shareBtn">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                        <button class="action-btn" id="refreshBtn">
+                            <i class="fas fa-sync-alt"></i> Refresh Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-section" id="recentSection" style="display: none;">
+                <h2><i class="fas fa-history"></i> Recent Broadcasts</h2>
+                <div class="recent-images" id="recentImages"></div>
+            </div>
+        </div>
+
+        <div class="viewer-count" id="viewerCount">
+            <i class="fas fa-user-friends"></i>
+            <span>Viewers: <span id="viewerCountNumber">1</span></span>
+        </div>
+
+        <a href="upload.html" class="admin-link">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Upload Images (Admin)</span>
+        </a>
+
+        <footer>
+            <p>Powered by <strong>Cloudinary</strong> • Cloud: <code>dcpqnmdas</code> • Images update in real-time</p>
+            <p>This page automatically refreshes to show the latest broadcasted images from Cloudinary</p>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+   
+<script>
+    // Public Viewing Page - SUPABASE REAL-TIME Version
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('📡 Public Viewing Page - Supabase Real-Time Version');
+        
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://ybnvozrsmtjkxoyoyihi.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlibnZvenJzbXRqa3hveW95aWhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxNTQ5ODAsImV4cCI6MjA4MzczMDk4MH0.ErY9Hhzua5lRUC-M_Zi5zm1XtIU0LzGA5Xa1Com8jC4';
+        
+        // DOM Elements
+        const broadcastImage = document.getElementById('broadcastImage');
+        const noImage = document.getElementById('noImage');
+        const imageInfo = document.getElementById('imageInfo');
+        const imageDimensions = document.getElementById('imageDimensions');
+        const imageSize = document.getElementById('imageSize');
+        const imageId = document.getElementById('imageId');
+        const lastUpdated = document.getElementById('lastUpdated');
+        const recentSection = document.getElementById('recentSection');
+        const recentImages = document.getElementById('recentImages');
+        const copyUrlBtn = document.getElementById('copyUrlBtn');
+        const openImageBtn = document.getElementById('openImageBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const viewerCountNumber = document.getElementById('viewerCountNumber');
+        const notification = document.getElementById('notification');
+        
+        // Initialize Supabase
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log('🚀 Supabase connected');
+        
+        let currentImageData = null;
+        let viewerCount = 1;
+        let realtimeChannel = null;
+        
+        // Initialize
+        initApp();
+        
+        // Event Listeners
+        copyUrlBtn.addEventListener('click', copyImageUrl);
+        openImageBtn.addEventListener('click', openImageFullSize);
+        shareBtn.addEventListener('click', shareImage);
+        refreshBtn.addEventListener('click', handleManualRefresh);
+        
+        // ===== INITIALIZATION =====
+        async function initApp() {
+            try {
+                // Load initial data
+                await loadInitialBroadcast();
+                await loadRecentImages();
+                await updateViewerStats();
+                
+                // Setup real-time subscriptions
+                setupRealtimeSubscriptions();
+                
+                // Start viewer count updates
+                startViewerCountUpdates();
+                
+                console.log('✅ Supabase real-time system ready');
+            } catch (error) {
+                console.error('❌ Initialization error:', error);
+                showNotification('Failed to initialize broadcast', 'error');
+            }
+        }
+        
+        // ===== SUPABASE REAL-TIME FUNCTIONS =====
+        function setupRealtimeSubscriptions() {
+            console.log('📡 Setting up real-time subscriptions...');
+            
+            // Subscribe to new image broadcasts
+            realtimeChannel = supabase
+                .channel('public-broadcast-channel')
+                .on(
+                    'postgres_changes',
+                    {
+                        event: 'INSERT',
+                        schema: 'public',
+                        table: 'broadcast_images',
+                        filter: 'is_active=eq.true'
+                    },
+                    (payload) => {
+                        console.log('🎯 New image broadcasted via real-time:', payload.new);
+                        handleNewBroadcast(payload.new);
+                    }
+                )
+                .on(
+                    'postgres_changes',
+                    {
+                        event: 'UPDATE',
+                        schema: 'public',
+                        table: 'broadcast_stats'
+                    },
+                    (payload) => {
+                        console.log('📊 Stats updated:', payload.new);
+                        updateViewerCountDisplay(payload.new.active_viewers);
+                    }
+                )
+                .subscribe((status) => {
+                    console.log('Real-time subscription status:', status);
+                    if (status === 'SUBSCRIBED') {
+                        showNotification('Connected to live broadcast', 'success');
+                    }
+                });
+        }
+        
+        // ===== LOAD DATA FUNCTIONS =====
+        async function loadInitialBroadcast() {
+            try {
+                console.log('📥 Loading latest broadcast...');
+                
+                // Try to get latest broadcast from view
+                const { data: latestImage, error } = await supabase
+                    .from('vw_latest_broadcast')
+                    .select('*')
+                    .maybeSingle();
+                
+                if (error) throw error;
+                
+                if (latestImage) {
+                    console.log('✅ Found latest image:', latestImage.public_id);
+                    displayImage(latestImage);
+                    updateImageInfo(latestImage);
+                    
+                    // Show image info section
+                    imageInfo.style.display = 'block';
+                    noImage.style.display = 'none';
+                    broadcastImage.style.display = 'block';
+                    
+                    currentImageData = latestImage;
+                } else {
+                    console.log('ℹ️ No images found yet');
+                    showNoImageMessage();
+                }
+            } catch (error) {
+                console.error('❌ Error loading broadcast:', error);
+                showNotification('Failed to load broadcast', 'error');
+            }
+        }
+        
+        async function loadRecentImages() {
+            try {
+                console.log('📥 Loading recent images...');
+                
+                // Use materialized view for performance
+                const { data: recent, error } = await supabase
+                    .from('vw_recent_broadcasts')
+                    .select('*')
+                    .order('displayed_at', { ascending: false })
+                    .limit(12);
+                
+                if (error) throw error;
+                
+                if (recent && recent.length > 0) {
+                    console.log(`✅ Loaded ${recent.length} recent images`);
+                    displayRecentImages(recent);
+                    recentSection.style.display = 'block';
+                } else {
+                    recentSection.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('❌ Error loading recent images:', error);
+                recentSection.style.display = 'none';
+            }
+        }
+        
+        async function updateViewerStats() {
+            try {
+                // Get current stats
+                const { data: stats, error } = await supabase
+                    .from('vw_broadcast_stats')
+                    .select('*')
+                    .maybeSingle();
+                
+                if (error) throw error;
+                
+                if (stats) {
+                    viewerCount = stats.active_viewers || 1;
+                    updateViewerCountDisplay(viewerCount);
+                    
+                    // Simulate viewer joining
+                    await supabase.rpc('increment_viewer_count', { 
+                        viewer_change: 1 
+                    });
+                }
+            } catch (error) {
+                console.error('❌ Error updating viewer stats:', error);
+                // Fallback to simulated count
+                viewerCount = Math.floor(Math.random() * 50) + 1;
+                updateViewerCountDisplay(viewerCount);
+            }
+        }
+        
+        // ===== HANDLE NEW BROADCASTS =====
+        function handleNewBroadcast(imageData) {
+            console.log('🔄 Processing new broadcast:', imageData.public_id);
+            
+            // Update current image
+            displayImage(imageData);
+            updateImageInfo(imageData);
+            
+            // Show success
+            showNotification('New image broadcasted!', 'success');
+            
+            // Update recent images
+            addToRecentDisplay(imageData);
+            
+            // Store current data
+            currentImageData = imageData;
+            
+            // Show image info section if hidden
+            imageInfo.style.display = 'block';
+            noImage.style.display = 'none';
+            broadcastImage.style.display = 'block';
+        }
+        
+        // ===== DISPLAY FUNCTIONS =====
+        function displayImage(imageData) {
+            if (!imageData || !imageData.secure_url) return;
+            
+            console.log('🖼️ Displaying image:', imageData.public_id);
+            
+            broadcastImage.src = imageData.secure_url;
+            broadcastImage.alt = `Broadcast: ${imageData.public_id}`;
+            
+            // Smooth transition
+            broadcastImage.style.opacity = '0';
+            setTimeout(() => {
+                broadcastImage.style.transition = 'opacity 0.5s ease';
+                broadcastImage.style.opacity = '1';
+            }, 10);
+        }
+        
+        function updateImageInfo(imageData) {
+            // Update ID
+            imageId.textContent = imageData.public_id || 'Unknown';
+            
+            // Update dimensions
+            if (imageData.width && imageData.height) {
+                imageDimensions.textContent = `${imageData.width} × ${imageData.height}`;
+            } else {
+                imageDimensions.textContent = 'Loading...';
+                // Try to get dimensions from image
+                const img = new Image();
+                img.onload = function() {
+                    imageDimensions.textContent = `${this.width} × ${this.height}`;
+                };
+                img.src = imageData.secure_url;
+            }
+            
+            // Update file size
+            if (imageData.bytes) {
+                const sizeInKB = (imageData.bytes / 1024).toFixed(1);
+                imageSize.textContent = sizeInKB >= 1024 
+                    ? `${(imageData.bytes / (1024 * 1024)).toFixed(2)} MB` 
+                    : `${sizeInKB} KB`;
+            } else {
+                imageSize.textContent = 'Unknown';
+            }
+            
+            // Update timestamp
+            if (imageData.created_at) {
+                lastUpdated.textContent = formatTimeAgo(new Date(imageData.created_at));
+            }
+        }
+        
+        function displayRecentImages(images) {
+            recentImages.innerHTML = '';
+            
+            images.forEach((image, index) => {
+                const recentItem = document.createElement('div');
+                recentItem.className = 'recent-item';
+                recentItem.title = `Click to view: ${image.public_id}`;
+                
+                // Create thumbnail URL (Cloudinary transformation)
+                const thumbnailUrl = image.secure_url.replace('/upload/', '/upload/w_200,h_150,c_fill/');
+                
+                recentItem.innerHTML = `
+                    <img src="${thumbnailUrl}" alt="Recent: ${image.public_id}" loading="lazy">
+                    <div class="recent-overlay">
+                        <i class="far fa-clock"></i> ${formatTime(new Date(image.displayed_at || image.created_at))}
+                    </div>
+                `;
+                
+                recentItem.addEventListener('click', () => {
+                    displayImage(image);
+                    updateImageInfo(image);
+                    currentImageData = image;
+                    showNotification('Loaded from history', 'info');
+                    
+                    // Smooth scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+                
+                recentImages.appendChild(recentItem);
+            });
+        }
+        
+        function addToRecentDisplay(imageData) {
+            // Add to beginning of recent images display
+            const recentItem = document.createElement('div');
+            recentItem.className = 'recent-item';
+            
+            const thumbnailUrl = imageData.secure_url.replace('/upload/', '/upload/w_200,h_150,c_fill/');
+            
+            recentItem.innerHTML = `
+                <img src="${thumbnailUrl}" alt="New: ${imageData.public_id}">
+                <div class="recent-overlay">
+                    <i class="fas fa-bolt"></i> Just now
+                </div>
+            `;
+            
+            recentItem.addEventListener('click', () => {
+                displayImage(imageData);
+                updateImageInfo(imageData);
+                showNotification('Loaded new image', 'info');
+            });
+            
+            // Insert at beginning
+            if (recentImages.firstChild) {
+                recentImages.insertBefore(recentItem, recentImages.firstChild);
+            } else {
+                recentImages.appendChild(recentItem);
+            }
+            
+            // Limit to 12 items
+            if (recentImages.children.length > 12) {
+                recentImages.removeChild(recentImages.lastChild);
+            }
+            
+            // Show section if hidden
+            recentSection.style.display = 'block';
+        }
+        
+        // ===== BUTTON HANDLERS =====
+        function copyImageUrl() {
+            if (!currentImageData || !currentImageData.secure_url) {
+                showNotification('No image to copy', 'error');
+                return;
+            }
+            
+            navigator.clipboard.writeText(currentImageData.secure_url)
+                .then(() => {
+                    showNotification('Image URL copied to clipboard!', 'success');
+                })
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                    showNotification('Failed to copy URL', 'error');
+                });
+        }
+        
+        function openImageFullSize() {
+            if (!currentImageData || !currentImageData.secure_url) {
+                showNotification('No image to open', 'error');
+                return;
+            }
+            
+            window.open(currentImageData.secure_url, '_blank', 'noopener,noreferrer');
+        }
+        
+        function shareImage() {
+            if (!currentImageData || !currentImageData.secure_url) return;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Live Image Broadcast',
+                    text: 'Check out this live broadcasted image!',
+                    url: currentImageData.secure_url,
+                }).catch(err => console.log('Share cancelled:', err));
+            } else {
+                copyImageUrl();
+            }
+        }
+        
+        async function handleManualRefresh() {
+            showNotification('Refreshing broadcast...', 'info');
+            
+            try {
+                await loadInitialBroadcast();
+                await loadRecentImages();
+                showNotification('Broadcast refreshed', 'success');
+            } catch (error) {
+                console.error('Manual refresh error:', error);
+                showNotification('Refresh failed', 'error');
+            }
+        }
+        
+        // ===== VIEWER COUNT MANAGEMENT =====
+        function startViewerCountUpdates() {
+            // Update viewer count every 30 seconds
+            setInterval(async () => {
+                try {
+                    // Get updated stats
+                    const { data: stats } = await supabase
+                        .from('vw_broadcast_stats')
+                        .select('active_viewers')
+                        .maybeSingle();
+                    
+                    if (stats) {
+                        updateViewerCountDisplay(stats.active_viewers);
+                    }
+                } catch (error) {
+                    console.error('Viewer count update error:', error);
+                }
+            }, 30000);
+            
+            // Update on page visibility change
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    updateViewerStats();
+                }
+            });
+        }
+        
+        function updateViewerCountDisplay(count) {
+            if (count !== undefined) {
+                viewerCount = count;
+                viewerCountNumber.textContent = count;
+                
+                // Add animation for count changes
+                viewerCountNumber.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    viewerCountNumber.style.transform = 'scale(1)';
+                }, 300);
+            }
+        }
+        
+        // ===== HELPER FUNCTIONS =====
+        function showNoImageMessage() {
+            imageInfo.style.display = 'none';
+            noImage.style.display = 'block';
+            broadcastImage.style.display = 'none';
+            recentSection.style.display = 'none';
+        }
+        
+        function formatTime(date) {
+            if (!date) return 'Unknown';
+            return date.toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: true 
+            });
+        }
+        
+        function formatTimeAgo(date) {
+            if (!date) return 'Unknown';
+            
+            const now = new Date();
+            const diffMs = now - date;
+            const diffSec = Math.floor(diffMs / 1000);
+            const diffMin = Math.floor(diffSec / 60);
+            const diffHour = Math.floor(diffMin / 60);
+            const diffDay = Math.floor(diffHour / 24);
+            
+            if (diffSec < 10) return 'Just now';
+            if (diffSec < 60) return `${diffSec} seconds ago`;
+            if (diffMin < 60) return `${diffMin} minute${diffMin > 1 ? 's' : ''} ago`;
+            if (diffHour < 24) return `${diffHour} hour${diffHour > 1 ? 's' : ''} ago`;
+            if (diffDay < 7) return `${diffDay} day${diffDay > 1 ? 's' : ''} ago`;
+            
+            return date.toLocaleDateString([], { 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = 'notification';
+            
+            // Set color based on type
+            const colors = {
+                success: '#2ecc71',
+                error: '#e74c3c',
+                info: '#3498db',
+                warning: '#f39c12'
+            };
+            
+            notification.style.backgroundColor = colors[type] || colors.success;
+            notification.classList.add('show');
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // ===== DEBUG FUNCTIONS =====
+        window.debugSupabase = {
+            getCurrentImage: () => currentImageData,
+            reload: () => initApp(),
+            disconnect: () => {
+                if (realtimeChannel) {
+                    supabase.removeChannel(realtimeChannel);
+                    showNotification('Disconnected from real-time', 'warning');
+                }
+            },
+            reconnect: () => {
+                setupRealtimeSubscriptions();
+                showNotification('Reconnecting...', 'info');
+            },
+            forceNewImage: async () => {
+                try {
+                    const { data: randomImage } = await supabase
+                        .from('broadcast_images')
+                        .select('*')
+                        .order('created_at', { ascending: false })
+                        .limit(1)
+                        .single();
+                    
+                    if (randomImage) {
+                        handleNewBroadcast(randomImage);
+                    }
+                } catch (error) {
+                    console.error('Force image error:', error);
+                }
+            }
+        };
+        
+        console.log('✅ Supabase real-time viewer initialized');
+        console.log('Debug commands available: debugSupabase.reload(), debugSupabase.disconnect()');
+    });
+</script>
+
+    
+</body>
+</html>
