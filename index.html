@@ -772,9 +772,10 @@ footer code {
 document.addEventListener('DOMContentLoaded', function() {
     // Your Cloudinary configuration - UPDATED WITH YOUR PRESET
     const cloudName = 'dcpqnmdas'; // Your Cloudinary cloud name
-    const uploadPreset = 'stan'; // Your upload preset name
+    const uploadPreset = 'stani'; // Your upload preset name
     
     // DOM Elements
+    
     const widgetUploadBtn = document.getElementById('widgetUploadBtn');
     const simpleUploadBtn = document.getElementById('simpleUploadBtn');
     const fileInput = document.getElementById('fileInput');
@@ -965,7 +966,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create FormData for upload - USING YOUR PRESET 'stan'
         const formData = new FormData();
         formData.append('file', selectedFile);
-        formData.append('upload_preset', 'stan'); // Your preset name
+        formData.append('upload_preset', 'stani'); // Your preset name
         formData.append('cloud_name', cloudName);
         
         // Upload to Cloudinary using fetch API
@@ -1050,7 +1051,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Reset upload UI
         resetUploadUI();
         
-        console.log('Image uploaded with preset "stan":', imageInfo.secure_url);
+        console.log('Image uploaded with preset "stani":', imageInfo.secure_url);
     }
     
     // Save image to broadcast (simulated)
