@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Truppers - Futuristic Membership</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+  --primary: #00ffcc;
+  --secondary: #7b2cff;
+  --accent: #ff4d4d;
+  --dark: #0a0a14;
+  --darker: #050510;
+  --light: #ffffff;
+  --gray: #a0a0c0;
+  --glass: rgba(20, 20, 40, 0.7);
+  --glass-border: rgba(100, 255, 255, 0.2);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --neon-glow: 0 0 15px var(--primary);
+  --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+* { 
+  box-sizing: border-box; 
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+  min-height: 100vh;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(123, 44, 255, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(0, 255, 204, 0.1) 0%, transparent 40%),
+    var(--darker) url("image.jpg") center/cover no-repeat fixed;
+  color: var(--light);
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(5, 5, 16, 0.9) 0%, rgba(10, 10, 20, 0.85) 100%);
+  z-index: -1;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin: 40px 0 60px;
+}
+
+.header h1 {
+  font-size: 4.5rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+.header h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  border-radius: 2px;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--gray);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Sections */
+.section {
+  background: var(--glass);
+  backdrop-filter: blur(0px);
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  padding: 40px;
+  margin-bottom: 40px;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+}
+
+/* Guide section */
+.guide-content {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 15px;
+  margin-bottom: 40px;
+}
+
+.guide-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.guide-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.guide-content::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+.guide-title {
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.guide-title i {
+  font-size: 1.5rem;
+}
+
+.guide-list {
+  list-style: none;
+  margin: 25px 0;
+}
+
+.guide-list li {
+  margin-bottom: 15px;
+  padding-left: 30px;
+  position: relative;
+  line-height: 1.6;
+}
+
+.guide-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-size: 1.2rem;
+}
+
+/* Buttons */
+.buttons-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.btn {
+  padding: 18px 35px;
+  border-radius: 12px;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-width: 180px;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.7s;
+  z-index: -1;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-agree {
+  background: linear-gradient(135deg, var(--primary), #00ccaa);
+  color: var(--dark);
+  box-shadow: 0 5px 15px rgba(0, 255, 204, 0.3);
+}
+
+.btn-agree:hover {
+  background: linear-gradient(135deg, #00ccaa, var(--primary));
+  box-shadow: var(--neon-glow);
+  transform: translateY(-3px);
+}
+
+.btn-cancel {
+  background: linear-gradient(135deg, var(--accent), #cc3d3d);
+  color: white;
+  box-shadow: 0 5px 15px rgba(255, 77, 77, 0.3);
+}
+
+.btn-cancel:hover {
+  background: linear-gradient(135deg, #cc3d3d, var(--accent));
+  box-shadow: 0 0 15px var(--accent), 0 0 25px rgba(255, 77, 77, 0.5);
+  transform: translateY(-3px);
+}
+
+.btn-submit {
+  width: 100%;
+  background: linear-gradient(135deg, var(--secondary), #5a1cb3);
+  color: white;
+  margin-top: 20px;
+  box-shadow: 0 5px 15px rgba(123, 44, 255, 0.3);
+}
+
+.btn-submit:hover {
+  background: linear-gradient(135deg, #5a1cb3, var(--secondary));
+  box-shadow: 0 0 15px var(--secondary), 0 0 25px rgba(123, 44, 255, 0.5);
+}
+
+.btn-upload {
+  width: 100%;
+  background: linear-gradient(135deg, #25D366, #1da851);
+  color: white;
+  margin-top: 20px;
+}
+
+.btn-upload:hover {
+  background: linear-gradient(135deg, #1da851, #25D366);
+  box-shadow: 0 0 15px #25D366, 0 0 25px rgba(37, 211, 102, 0.5);
+}
+
+.btn-whatsapp {
+  width: 100%;
+  background: linear-gradient(135deg, #25D366, #1da851);
+  color: white;
+  font-size: 1.5rem;
+  padding: 25px;
+  box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+}
+
+.btn-whatsapp:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(37, 211, 102, 0.6);
+}
+
+/* Form inputs */
+.form-group {
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--primary);
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.input-field {
+  width: 100%;
+  padding: 18px 15px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1.1rem;
+  transition: var(--transition);
+}
+
+.input-field:focus {
+  outline: none;
+  border-bottom-color: var(--primary);
+  box-shadow: 0 5px 15px rgba(0, 255, 204, 0.1);
+}
+
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input-highlight {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: var(--primary);
+  transition: width 0.4s ease;
+}
+
+.input-field:focus + .input-highlight {
+  width: 100%;
+}
+
+/* File upload */
+.file-upload {
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 40px 20px;
+  text-align: center;
+  transition: var(--transition);
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.file-upload:hover {
+  border-color: var(--primary);
+  background: rgba(0, 255, 204, 0.05);
+}
+
+.file-upload i {
+  font-size: 3rem;
+  color: var(--primary);
+  margin-bottom: 15px;
+}
+
+.file-upload p {
+  color: var(--gray);
+  margin-bottom: 10px;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-name {
+  margin-top: 15px;
+  color: var(--primary);
+  font-weight: 500;
+  word-break: break-all;
+}
+
+/* Image preview */
+.image-preview {
+  width: 200px;
+  height: 200px;
+  border-radius: 15px;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+  display: none;
+  margin: 20px auto;
+}
+
+/* Loader */
+.loader-container {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.loader {
+  width: 80px;
+  height: 80px;
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  border-top: 5px solid var(--primary);
+  border-radius: 50%;
+  margin: 0 auto 30px;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader-text {
+  font-size: 1.5rem;
+  color: var(--primary);
+  letter-spacing: 2px;
+}
+
+/* Toast notifications */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.toast {
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-left: 4px solid var(--primary);
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  color: white;
+  font-weight: 500;
+  box-shadow: var(--shadow);
+  animation: slideIn 0.3s ease;
+  min-width: 300px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast-success {
+  border-left-color: #25D366;
+}
+
+.toast-error {
+  border-left-color: var(--accent);
+}
+
+.toast-warning {
+  border-left-color: #ffaa00;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Verification code modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 5, 16, 0.9);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+  padding: 20px;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background: var(--glass);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  transform: translateY(30px);
+  transition: transform 0.4s;
+  text-align: center;
+}
+
+.modal-overlay.active .modal {
+  transform: translateY(0);
+}
+
+.modal-icon {
+  font-size: 3rem;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: var(--primary);
+}
+
+.modal-message {
+  margin-bottom: 30px;
+  line-height: 1.6;
+  color: var(--gray);
+}
+
+.verification-code {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--primary);
+  border-radius: 10px;
+  padding: 20px;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--primary);
+  margin: 25px 0;
+  font-family: monospace;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.verification-code:hover {
+  background: rgba(0, 255, 204, 0.1);
+  box-shadow: var(--neon-glow);
+}
+
+.copy-notice {
+  color: var(--gray);
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+.modal-btn {
+  background: linear-gradient(135deg, var(--secondary), #5a1cb3);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.modal-btn:hover {
+  background: linear-gradient(135deg, #5a1cb3, var(--secondary));
+  box-shadow: 0 0 15px var(--secondary);
+}
+
+/* Hidden class */
+.hidden {
+  display: none !important;
+}
+
+/* Progress indicator */
+.progress-steps {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  gap: 20px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray);
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.step.active .step-circle {
+  background: var(--primary);
+  color: var(--dark);
+  box-shadow: var(--neon-glow);
+}
+
+.step.completed .step-circle {
+  background: #25D366;
+  color: white;
+}
+
+.step-label {
+  font-size: 0.9rem;
+  color: var(--gray);
+}
+
+.step.active .step-label {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .header h1 {
+    font-size: 3rem;
+  }
+  
+  .section {
+    padding: 30px 20px;
+  }
+  
+  .buttons-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .progress-steps {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+}
+</style>
+</head>
+
+<body>
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Verification Code Modal -->
+<div class="modal-overlay" id="codeModal">
+  <div class="modal">
+    <div class="modal-icon">
+      <i class="fas fa-key"></i>
+    </div>
+    <h3 class="modal-title">Your Verification Code</h3>
+    <p class="modal-message">Copy this unique code and share it in the WhatsApp group to complete your verification and gain full access to the Truppers community.</p>
+    
+    <div class="verification-code" id="verificationCode">TRP-XXXXXX</div>
+    <p class="copy-notice">Click the code to copy it to clipboard</p>
+    
+    <p class="modal-message">After copying the code, you will be redirected to our WhatsApp group. Paste the code in the group chat to verify your membership.</p>
+    
+    <button class="modal-btn" id="whatsappRedirectBtn">
+      <i class="fab fa-whatsapp"></i> Go to WhatsApp Group
+    </button>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h1>TRUPPERS</h1>
+    <p class="subtitle">Join the futuristic community of verified members</p>
+  </div>
+
+  <!-- Progress Steps -->
+  <div class="progress-steps" id="progressSteps">
+    <div class="step active" id="step1">
+      <div class="step-circle">1</div>
+      <div class="step-label">Guidelines</div>
+    </div>
+    <div class="step" id="step2">
+      <div class="step-circle">2</div>
+      <div class="step-label">Your Info</div>
+    </div>
+    <div class="step" id="step3">
+      <div class="step-circle">3</div>
+      <div class="step-label">Upload Photo</div>
+    </div>
+    <div class="step" id="step4">
+      <div class="step-circle">4</div>
+      <div class="step-label">Join Group</div>
+    </div>
+  </div>
+
+  <!-- Guide Section -->
+  <section id="guide" class="section">
+    <h2 class="guide-title"><i class="fas fa-compass"></i> Membership Guidelines</h2>
+    
+    <div class="guide-content">
+      <p>Welcome to Truppers, the exclusive community for forward-thinkers and innovators. Before proceeding, please carefully read and understand our membership guidelines.</p>
+      
+      <p>Our community is built on trust, authenticity, and mutual respect. To maintain the integrity of our network, we require all members to adhere to the following principles:</p>
+      
+      <ul class="guide-list">
+        <li><strong>Real Identity Required:</strong> You must use your actual legal name and identity. Pseudonyms or anonymous profiles are not permitted.</li>
+        <li><strong>Authentic Photo Upload:</strong> A clear, recent photograph of yourself must be uploaded for verification purposes.</li>
+        <li><strong>Single Membership Policy:</strong> Each individual is allowed only one active membership account.</li>
+        <li><strong>Mandatory Verification:</strong> All information provided will undergo a verification process.</li>
+        <li><strong>Community Respect:</strong> Members are expected to treat each other with respect and professionalism.</li>
+        <li><strong>Privacy Commitment:</strong> Your personal data is encrypted and protected according to our privacy policy.</li>
+        <li><strong>Active Participation:</strong> Members are encouraged to actively engage with the community.</li>
+      </ul>
+      
+      <p>By proceeding, you acknowledge that you have read, understood, and agree to abide by these guidelines. Violation of any guideline may result in membership termination.</p>
+    </div>
+    
+    <div class="buttons-container">
+      <button class="btn btn-agree" id="agreeBtn">
+        <i class="fas fa-check-circle"></i> I Agree & Continue
+      </button>
+      <button class="btn btn-cancel" id="cancelBtn">
+        <i class="fas fa-times-circle"></i> Cancel
+      </button>
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <section id="form" class="section hidden">
+    <h2 class="guide-title"><i class="fas fa-user-edit"></i> Your Information</h2>
+    <p>Please provide your authentic details for verification.</p>
+    
+    <div class="form-group">
+      <label class="input-label">Full Legal Name</label>
+      <input id="name" class="input-field" placeholder="Enter your full name as per official documents">
+      <div class="input-highlight"></div>
+    </div>
+    
+    <div class="form-group">
+      <label class="input-label">Phone Number</label>
+      <input id="phone" class="input-field" placeholder="Enter your active phone number with country code">
+      <div class="input-highlight"></div>
+    </div>
+    
+    <button class="btn btn-submit" id="submitBtn">
+      <i class="fas fa-paper-plane"></i> Submit & Continue
+    </button>
+  </section>
+
+  <!-- Loader Section -->
+  <section id="loader" class="section hidden">
+    <div class="loader-container">
+      <div class="loader"></div>
+      <p class="loader-text" id="loaderText">Processing Your Information</p>
+      <p id="loaderSubtext">Please wait while we verify your details and generate your unique member ID.</p>
+    </div>
+  </section>
+
+  <!-- Upload Section -->
+  <section id="upload" class="section hidden">
+    <h2 class="guide-title"><i class="fas fa-camera"></i> Upload Your Photo</h2>
+    <p>Upload a clear, recent photo of yourself for verification.</p>
+    
+    <!-- Image Preview -->
+    <img id="imagePreview" class="image-preview" alt="Preview will appear here">
+    
+    <div class="file-upload" id="fileUploadArea">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <p>Click to select or drag & drop your photo</p>
+      <p class="file-name" id="fileName">No file selected</p>
+      <input type="file" id="photo" class="file-input" accept="image/*">
+    </div>
+    
+    <div class="form-group">
+      <label class="input-label">Photo Requirements:</label>
+      <ul class="guide-list">
+        <li>Clear, recent photo of your face</li>
+        <li>Good lighting with face clearly visible</li>
+        <li>No filters or heavy editing</li>
+        <li>File size less than 5MB</li>
+      </ul>
+    </div>
+    
+    <button class="btn btn-upload" id="uploadBtn">
+      <i class="fas fa-upload"></i> Upload & Verify
+    </button>
+  </section>
+
+  <!-- WhatsApp Section -->
+  <section id="whatsapp" class="section hidden">
+    <h2 class="guide-title"><i class="fab fa-whatsapp"></i> Final Step: Join Our Community</h2>
+    <p>You're almost there! Click the button below to join our exclusive WhatsApp group where you'll connect with fellow Truppers members.</p>
+    
+    <div class="form-group">
+      <div style="text-align: center; margin: 30px 0;">
+        <i class="fas fa-check-circle" style="font-size: 4rem; color: var(--primary); margin-bottom: 20px;"></i>
+        <p id="verificationMessage">Your profile has been successfully verified!</p>
+      </div>
+    </div>
+    
+    <button class="btn btn-whatsapp" id="whatsappBtn">
+      <i class="fab fa-whatsapp"></i> JOIN TRUPPERS WHATSAPP GROUP
+    </button>
+  </section>
+</div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// ============================================
+// CONFIGURATION
+// ============================================
+const CONFIG = {
+  SUPABASE_URL: "https://ybnvozrsmtjkxoyoyihi.supabase.co",
+  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlibnZvenJzbXRqa3hveW95aWhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxNTQ5ODAsImV4cCI6MjA4MzczMDk4MH0.ErY9Hhzua5lRUC-M_Zi5zm1XtIU0LzGA5Xa1Com8jC4",
+  WHATSAPP_GROUP_LINK: "https://chat.whatsapp.com/YOUR_GROUP_LINK",
+  STORAGE_BUCKET: "member-images",
+  
+  // Validation
+  MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
+  ALLOWED_FILE_TYPES: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+  
+  // Performance
+  IMAGE_OPTIMIZATION: {
+    maxWidth: 800,
+    quality: 0.8
+  }
+};
+
+// ============================================
+// SUPABASE INITIALIZATION
+// ============================================
+const supabase = window.supabase.createClient(
+  CONFIG.SUPABASE_URL,
+  CONFIG.SUPABASE_ANON_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
+);
+
+// ============================================
+// STATE MANAGEMENT
+// ============================================
+let AppState = {
+  memberId: null,
+  verificationCode: null,
+  uploadedImageUrl: null,
+  currentStep: 1,
+  
+  // Session restoration
+  restoreSession() {
+    this.memberId = localStorage.getItem('truppers_member_id');
+    this.verificationCode = localStorage.getItem('truppers_verification_code');
+    this.uploadedImageUrl = localStorage.getItem('truppers_image_url');
+    this.currentStep = parseInt(localStorage.getItem('truppers_current_step') || '1');
+    
+    return {
+      hasSession: !!this.memberId,
+      memberId: this.memberId,
+      verificationCode: this.verificationCode,
+      currentStep: this.currentStep
+    };
+  },
+  
+  saveSession() {
+    if (this.memberId) localStorage.setItem('truppers_member_id', this.memberId);
+    if (this.verificationCode) localStorage.setItem('truppers_verification_code', this.verificationCode);
+    if (this.uploadedImageUrl) localStorage.setItem('truppers_image_url', this.uploadedImageUrl);
+    localStorage.setItem('truppers_current_step', this.currentStep.toString());
+  },
+  
+  clearSession() {
+    this.memberId = null;
+    this.verificationCode = null;
+    this.uploadedImageUrl = null;
+    this.currentStep = 1;
+    
+    localStorage.removeItem('truppers_member_id');
+    localStorage.removeItem('truppers_verification_code');
+    localStorage.removeItem('truppers_image_url');
+    localStorage.removeItem('truppers_current_step');
+  },
+  
+  setMemberData(memberId, verificationCode) {
+    this.memberId = memberId;
+    this.verificationCode = verificationCode;
+    this.saveSession();
+  },
+  
+  setImageUrl(url) {
+    this.uploadedImageUrl = url;
+    this.saveSession();
+  },
+  
+  setStep(step) {
+    this.currentStep = step;
+    this.saveSession();
+    updateProgressSteps(step);
+  }
+};
+
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+class Utils {
+  static showToast(message, type = 'info') {
+    const toastContainer = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `
+      <i class="fas ${this.getToastIcon(type)}"></i>
+      <span>${message}</span>
+    `;
+    
+    toastContainer.appendChild(toast);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      toast.style.animation = 'slideIn 0.3s ease reverse';
+      setTimeout(() => toast.remove(), 300);
+    }, 5000);
+    
+    return toast;
+  }
+  
+  static getToastIcon(type) {
+    const icons = {
+      success: 'fa-check-circle',
+      error: 'fa-exclamation-circle',
+      warning: 'fa-exclamation-triangle',
+      info: 'fa-info-circle'
+    };
+    return icons[type] || icons.info;
+  }
+  
+  static showLoading(show, text = 'Processing...') {
+    const loader = document.getElementById('loader');
+    const loaderText = document.getElementById('loaderText');
+    const loaderSubtext = document.getElementById('loaderSubtext');
+    
+    if (loader) {
+      loader.classList.toggle('hidden', !show);
+      if (loaderText) loaderText.textContent = text;
+      if (loaderSubtext) loaderSubtext.textContent = 'Please wait...';
+    }
+  }
+  
+  static validatePhoneNumber(phone) {
+    // Basic international phone validation
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+  }
+  
+  static validateName(name) {
+    return name.trim().length >= 2 && name.trim().length <= 100;
+  }
+  
+  static async optimizeImage(file) {
+    return new Promise((resolve, reject) => {
+      if (!CONFIG.ALLOWED_FILE_TYPES.includes(file.type)) {
+        reject(new Error('Invalid file type. Please upload an image.'));
+        return;
+      }
+      
+      if (file.size > CONFIG.MAX_FILE_SIZE) {
+        reject(new Error('File size too large. Maximum 5MB.'));
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          let width = img.width;
+          let height = img.height;
+          
+          // Resize if too large
+          if (width > CONFIG.IMAGE_OPTIMIZATION.maxWidth) {
+            height = (height * CONFIG.IMAGE_OPTIMIZATION.maxWidth) / width;
+            width = CONFIG.IMAGE_OPTIMIZATION.maxWidth;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          // Draw and compress
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(
+            (blob) => {
+              const optimizedFile = new File(
+                [blob],
+                `optimized_${Date.now()}.jpg`,
+                { type: 'image/jpeg' }
+              );
+              resolve(optimizedFile);
+            },
+            'image/jpeg',
+            CONFIG.IMAGE_OPTIMIZATION.quality
+          );
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+  
+  static generateVerificationCode() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = 'TRP-';
+    for (let i = 0; i < 6; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+  }
+  
+  static copyToClipboard(text) {
+    return navigator.clipboard.writeText(text);
+  }
+}
+
+// ============================================
+// SUPABASE SERVICE
+// ============================================
+class SupabaseService {
+  static async createMember(fullName, phoneNumber) {
+    try {
+      // Generate verification code
+      const verificationCode = Utils.generateVerificationCode();
+      
+      // Insert member with RPC function
+      const { data, error } = await supabase
+        .rpc('create_member_with_code', {
+          p_full_name: fullName,
+          p_phone_number: phoneNumber
+        });
+      
+      if (error) throw error;
+      
+      if (data && data.length > 0) {
+        return {
+          success: true,
+          memberId: data[0].member_id,
+          verificationCode: data[0].verification_code,
+          createdAt: data[0].created_at
+        };
+      }
+      
+      throw new Error('Failed to create member');
+      
+    } catch (error) {
+      console.error('Supabase createMember error:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+  
+  static async uploadMemberImage(memberId, file) {
+    try {
+      // Generate unique filename
+      const fileExt = 'jpg'; // Always use jpg after optimization
+      const fileName = `${memberId}-${Date.now()}.${fileExt}`;
+      const filePath = `public/${fileName}`;
+      
+      // Upload to storage
+      const { error: uploadError } = await supabase.storage
+        .from(CONFIG.STORAGE_BUCKET)
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+      
+      if (uploadError) throw uploadError;
+      
+      // Update member record with image URL using RPC
+      const { data: updateData, error: updateError } = await supabase
+        .rpc('update_member_image', {
+          p_member_id: memberId,
+          p_image_storage_path: filePath
+        });
+      
+      if (updateError) throw updateError;
+      
+      return {
+        success: true,
+        imageUrl: updateData
+      };
+      
+    } catch (error) {
+      console.error('Supabase uploadMemberImage error:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+  
+  static async checkMemberExists(phoneNumber) {
+    try {
+      const { data, error } = await supabase
+        .from('members')
+        .select('id, full_name')
+        .eq('phone_number', phoneNumber)
+        .maybeSingle();
+      
+      if (error) throw error;
+      
+      return {
+        exists: !!data,
+        data: data
+      };
+      
+    } catch (error) {
+      console.error('Supabase checkMemberExists error:', error);
+      return {
+        exists: false,
+        error: error.message
+      };
+    }
+  }
+}
+
+// ============================================
+// UI CONTROLLER
+// ============================================
+class UIController {
+  static updateProgressSteps(currentStep) {
+    const steps = document.querySelectorAll('.step');
+    steps.forEach((step, index) => {
+      const stepNumber = index + 1;
+      step.classList.remove('active', 'completed');
+      
+      if (stepNumber === currentStep) {
+        step.classList.add('active');
+      } else if (stepNumber < currentStep) {
+        step.classList.add('completed');
+      }
+    });
+  }
+  
+  static showSection(sectionId) {
+    // Hide all sections
+    const sections = ['guide', 'form', 'loader', 'upload', 'whatsapp'];
+    sections.forEach(id => {
+      const section = document.getElementById(id);
+      if (section) section.classList.add('hidden');
+    });
+    
+    // Show target section
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+      targetSection.classList.remove('hidden');
+      targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+  
+  static showVerificationModal(code) {
+    const modal = document.getElementById('codeModal');
+    const codeElement = document.getElementById('verificationCode');
+    
+    codeElement.textContent = code;
+    modal.classList.add('active');
+    
+    // Add copy functionality
+    codeElement.onclick = () => {
+      Utils.copyToClipboard(code).then(() => {
+        codeElement.textContent = 'Copied!';
+        codeElement.style.color = '#00ffcc';
+        
+        setTimeout(() => {
+          codeElement.textContent = code;
+          codeElement.style.color = '';
+        }, 2000);
+      }).catch(err => {
+        console.error('Copy failed:', err);
+        Utils.showToast('Failed to copy code', 'error');
+      });
+    };
+  }
+  
+  static hideVerificationModal() {
+    const modal = document.getElementById('codeModal');
+    modal.classList.remove('active');
+  }
+  
+  static updateFilePreview(file) {
+    const preview = document.getElementById('imagePreview');
+    const fileName = document.getElementById('fileName');
+    
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+      
+      fileName.textContent = file.name;
+    } else {
+      preview.style.display = 'none';
+      fileName.textContent = 'No file selected';
+    }
+  }
+}
+
+// ============================================
+// APPLICATION FLOW
+// ============================================
+class ApplicationFlow {
+  static async initialize() {
+    // Restore session
+    const session = AppState.restoreSession();
+    
+    if (session.hasSession) {
+      // Restore to the correct step
+      this.goToStep(session.currentStep);
+      
+      // If already uploaded image, go to WhatsApp step
+      if (session.uploadedImageUrl) {
+        this.goToStep(4);
+      } else if (session.memberId) {
+        this.goToStep(3);
+      }
+    } else {
+      this.goToStep(1);
+    }
+    
+    this.setupEventListeners();
+  }
+  
+  static goToStep(step) {
+    AppState.setStep(step);
+    
+    switch(step) {
+      case 1:
+        UIController.showSection('guide');
+        break;
+      case 2:
+        UIController.showSection('form');
+        break;
+      case 3:
+        UIController.showSection('upload');
+        break;
+      case 4:
+        UIController.showSection('whatsapp');
+        // Update verification message
+        const messageElement = document.getElementById('verificationMessage');
+        if (messageElement && AppState.verificationCode) {
+          messageElement.innerHTML = `
+            Your profile has been successfully verified!<br>
+            <small style="color: var(--primary);">Code: ${AppState.verificationCode}</small>
+          `;
+        }
+        break;
+    }
+  }
+  
+  static setupEventListeners() {
+    // Agree button
+    document.getElementById('agreeBtn').addEventListener('click', () => {
+      this.goToStep(2);
+    });
+    
+    // Cancel button
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      AppState.clearSession();
+      location.reload();
+    });
+    
+    // Submit form
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+      await this.handleFormSubmit();
+    });
+    
+    // File upload area
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const fileInput = document.getElementById('photo');
+    
+    fileUploadArea.addEventListener('click', () => {
+      fileInput.click();
+    });
+    
+    fileUploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      fileUploadArea.style.borderColor = 'var(--primary)';
+      fileUploadArea.style.background = 'rgba(0, 255, 204, 0.05)';
+    });
+    
+    fileUploadArea.addEventListener('dragleave', () => {
+      fileUploadArea.style.borderColor = '';
+      fileUploadArea.style.background = '';
+    });
+    
+    fileUploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      fileUploadArea.style.borderColor = '';
+      fileUploadArea.style.background = '';
+      
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        this.handleFileSelect(fileInput.files[0]);
+      }
+    });
+    
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length) {
+        this.handleFileSelect(e.target.files[0]);
+      }
+    });
+    
+    // Upload button
+    document.getElementById('uploadBtn').addEventListener('click', async () => {
+      await this.handleImageUpload();
+    });
+    
+    // WhatsApp button
+    document.getElementById('whatsappBtn').addEventListener('click', () => {
+      this.showVerificationCode();
+    });
+    
+    // WhatsApp redirect button in modal
+    document.getElementById('whatsappRedirectBtn').addEventListener('click', () => {
+      UIController.hideVerificationModal();
+      window.open(CONFIG.WHATSAPP_GROUP_LINK, '_blank');
+    });
+    
+    // Form enter key submission
+    document.getElementById('name').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') this.handleFormSubmit();
+    });
+    
+    document.getElementById('phone').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') this.handleFormSubmit();
+    });
+  }
+  
+  static async handleFormSubmit() {
+    const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+    
+    const fullName = nameInput.value.trim();
+    const phoneNumber = phoneInput.value.trim();
+    
+    // Validation
+    if (!Utils.validateName(fullName)) {
+      Utils.showToast('Please enter a valid full name (2-100 characters)', 'error');
+      nameInput.focus();
+      return;
+    }
+    
+    if (!Utils.validatePhoneNumber(phoneNumber)) {
+      Utils.showToast('Please enter a valid phone number with country code', 'error');
+      phoneInput.focus();
+      return;
+    }
+    
+    // Check if member already exists
+    Utils.showLoading(true, 'Checking phone number...');
+    const { exists } = await SupabaseService.checkMemberExists(phoneNumber);
+    
+    if (exists) {
+      Utils.showLoading(false);
+      Utils.showToast('This phone number is already registered', 'error');
+      return;
+    }
+    
+    // Create member
+    Utils.showLoading(true, 'Creating your membership...');
+    const result = await SupabaseService.createMember(fullName, phoneNumber);
+    Utils.showLoading(false);
+    
+    if (result.success) {
+      AppState.setMemberData(result.memberId, result.verificationCode);
+      Utils.showToast('Membership created successfully!', 'success');
+      this.goToStep(3);
+    } else {
+      Utils.showToast(`Error: ${result.error}`, 'error');
+    }
+  }
+  
+  static handleFileSelect(file) {
+    if (!file) return;
+    
+    // Validate file type
+    if (!CONFIG.ALLOWED_FILE_TYPES.includes(file.type)) {
+      Utils.showToast('Please select an image file (JPEG, PNG, WebP, GIF)', 'error');
+      return;
+    }
+    
+    // Validate file size
+    if (file.size > CONFIG.MAX_FILE_SIZE) {
+      Utils.showToast('File size must be less than 5MB', 'error');
+      return;
+    }
+    
+    // Show preview
+    UIController.updateFilePreview(file);
+  }
+  
+  static async handleImageUpload() {
+    const fileInput = document.getElementById('photo');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+      Utils.showToast('Please select an image to upload', 'error');
+      return;
+    }
+    
+    if (!AppState.memberId) {
+      Utils.showToast('Please complete the previous steps first', 'error');
+      return;
+    }
+    
+    try {
+      // Optimize image
+      Utils.showLoading(true, 'Optimizing image...');
+      const optimizedFile = await Utils.optimizeImage(file);
+      
+      // Upload to Supabase
+      Utils.showLoading(true, 'Uploading your photo...');
+      const result = await SupabaseService.uploadMemberImage(AppState.memberId, optimizedFile);
+      Utils.showLoading(false);
+      
+      if (result.success) {
+        AppState.setImageUrl(result.imageUrl);
+        Utils.showToast('Photo uploaded successfully!', 'success');
+        this.goToStep(4);
+      } else {
+        Utils.showToast(`Upload failed: ${result.error}`, 'error');
+      }
+      
+    } catch (error) {
+      Utils.showLoading(false);
+      Utils.showToast(error.message, 'error');
+    }
+  }
+  
+  static showVerificationCode() {
+    if (!AppState.verificationCode) {
+      Utils.showToast('No verification code found. Please start over.', 'error');
+      AppState.clearSession();
+      this.goToStep(1);
+      return;
+    }
+    
+    UIController.showVerificationModal(AppState.verificationCode);
+  }
+}
+
+// ============================================
+// INITIALIZATION
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize the application
+  ApplicationFlow.initialize();
+  
+  // Show welcome message
+  setTimeout(() => {
+    const session = AppState.restoreSession();
+    if (!session.hasSession) {
+      Utils.showToast('Welcome to Truppers! Read the guidelines to begin.', 'info');
+    }
+  }, 1000);
+  
+  // Add input focus effects
+  const inputs = document.querySelectorAll('.input-field');
+  inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+      this.style.borderBottomColor = 'var(--primary)';
+    });
+    
+    input.addEventListener('blur', function() {
+      if (!this.value) {
+        this.style.borderBottomColor = '';
+      }
+    });
+  });
+  
+  // Session timeout warning (optional)
+  setTimeout(() => {
+    if (!AppState.uploadedImageUrl && AppState.memberId) {
+      Utils.showToast('Your session will expire in 15 minutes. Please complete your registration.', 'warning');
+    }
+  }, 15 * 60 * 1000); // 15 minutes
+});
+
+// ============================================
+// ERROR HANDLING
+// ============================================
+window.addEventListener('error', (event) => {
+  console.error('Global error:', event.error);
+  Utils.showToast('An unexpected error occurred. Please refresh the page.', 'error');
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Unhandled promise rejection:', event.reason);
+  Utils.showToast('A network error occurred. Please check your connection.', 'error');
+});
+
+// ============================================
+// SERVICE WORKER FOR OFFLINE SUPPORT (OPTIONAL)
+// ============================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(error => {
+      console.log('ServiceWorker registration failed:', error);
+    });
+  });
+}
+</script>
+</body>
+</html>
